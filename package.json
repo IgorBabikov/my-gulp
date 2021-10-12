@@ -1,0 +1,33 @@
+{
+	"name": "gulp-project",
+	"version": "1.0.0",
+	"description": "my gulp",
+	"main": "index.html",
+	"author": "Igor Babikov",
+	"license": "ISC",
+	"devDependencies": {
+		"browser-sync": "latest",
+		"del": "latest",
+		"gulp": "latest",
+		"gulp-autoprefixer": "latest",
+		"gulp-clean-css": "latest",
+		"gulp-file-include": "latest",
+		"gulp-fonter": "latest",
+		"gulp-group-css-media-queries": "latest",
+		"gulp-sass": "latest",
+		"sass": "latest",
+		"gulp-uglify-es": "latest",
+		"gulp-webp-html": "latest",
+		"gulp-webpcss": "latest",
+		"imagemin-webp": "latest",
+		"transform-runtime": "0.0.0",
+		"webp-converter": "2.2.3",
+		"gulp-imagemin": "7.1.0",
+		"gulp-newer": "latest",
+		"gulp-plumber": "latest",
+		"gulp-rename": "latest",
+		"gulp-ttf2woff": "latest",
+		"gulp-ttf2woff2": "latest",
+		"gulp-svg-sprite": "latest"
+	}
+}
