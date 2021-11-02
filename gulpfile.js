@@ -9,21 +9,24 @@ const path = {
 		js: distPath + "assets/js/",
 		css: distPath + "assets/css/",
 		images: distPath + "assets/images/",
-		fonts: distPath + "assets/fonts/"
+		fonts: distPath + "assets/fonts/",
+		favicon: "dist/assets/favicon/",
 	},
 	src: {
 		html: srcPath + "*.html",
 		js: srcPath + "assets/js/*.js",
 		css: srcPath + "assets/scss/*.scss",
 		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
+		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+		favicon: "src/assets/favicon/**/*",
 	},
 	watch: {
 		html: srcPath + "**/*.html",
 		js: srcPath + "assets/js/**/*.js",
 		css: srcPath + "assets/scss/**/*.scss",
 		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
+		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+		favicon: "src/assets/favicon/**/*",
 	},
 	clean: "./" + distPath
 };
@@ -212,6 +215,12 @@ function fontsOtf() {
 		.pipe(gulp.dest('./' + srcPath + 'assets/fonts/'));
 }
 
+function favicon() {
+	return src(path.src.favicon)
+		.pipe(dest(path.build.favicon))
+		.pipe(browsersync.stream());
+}
+
 gulp.task('svgSprite', function () {
 	return gulp.src([srcPath + 'assets/iconsprite/*.svg'])
 		.pipe(svgSprite({
@@ -253,6 +262,7 @@ function watchFiles(params) {
 	gulp.watch([path.watch.css], css);
 	gulp.watch([path.watch.js], jsWatch);
 	gulp.watch([path.watch.images], images);
+	gulp.watch([path.watch.favicon], favicon);
 }
 
 function clean(params) {
@@ -260,7 +270,7 @@ function clean(params) {
 }
 
 let fontsBuild = gulp.series(fontsOtf, fonts, fontstyle);
-let buildDev = gulp.series(clean, gulp.parallel(fontsBuild, html, css, js, images));
+let buildDev = gulp.series(clean, gulp.parallel(fontsBuild, html, css, js, images, favicon));
 let watch = gulp.series(buildDev, gulp.parallel(watchFiles, browserSync));
 
 exports.html = html;
@@ -268,5 +278,6 @@ exports.css = css;
 exports.js = js;
 exports.images = images;
 exports.fonts = fontsBuild;
+exports.favicon = favicon;
 exports.watch = watch;
 exports.default = watch;
