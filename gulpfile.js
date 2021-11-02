@@ -5,25 +5,25 @@ let fs = require('fs');
 
 const path = {
 	build: {
-		 html:   distPath,
-		 js:     distPath + "assets/js/",
-		 css:    distPath + "assets/css/",
-		 images: distPath + "assets/images/",
-		 fonts:  distPath + "assets/fonts/"
+		html: distPath,
+		js: distPath + "assets/js/",
+		css: distPath + "assets/css/",
+		images: distPath + "assets/images/",
+		fonts: distPath + "assets/fonts/"
 	},
 	src: {
-		 html:   srcPath + "*.html",
-		 js:     srcPath + "assets/js/*.js",
-		 css:    srcPath + "assets/scss/*.scss",
-		 images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-		 fonts:  srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
+		html: srcPath + "*.html",
+		js: srcPath + "assets/js/*.js",
+		css: srcPath + "assets/scss/*.scss",
+		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
+		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
 	},
 	watch: {
-		 html:   srcPath + "**/*.html",
-		 js:     srcPath + "assets/js/**/*.js",
-		 css:    srcPath + "assets/scss/**/*.scss",
-		 images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-		 fonts:  srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
+		html: srcPath + "**/*.html",
+		js: srcPath + "assets/js/**/*.js",
+		css: srcPath + "assets/scss/**/*.scss",
+		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
+		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
 	},
 	clean: "./" + distPath
 };
@@ -70,12 +70,12 @@ function html() {
 		.pipe(fileinclude())
 		// .pipe(webphtml())
 		.pipe(panini({
-			root:       srcPath,
-			layouts:    srcPath + 'layouts/',
-			partials:   srcPath + 'partials/',
-			helpers:    srcPath + 'helpers/',
-			data:       srcPath + 'data/'
-	  }))
+			root: srcPath,
+			layouts: srcPath + 'layouts/',
+			partials: srcPath + 'partials/',
+			helpers: srcPath + 'helpers/',
+			data: srcPath + 'data/'
+		}))
 		.pipe(dest(path.build.html))
 		.pipe(browsersync.stream());
 }
@@ -124,7 +124,7 @@ function js() {
 		.pipe(webpackStream({
 			mode: "production",
 			output: {
-				filename: 'bundle.js',
+				filename: 'script.js',
 			}
 		}))
 		.pipe(dest(path.build.js))
@@ -136,7 +136,27 @@ function jsWatch() {
 		.pipe(webpackStream({
 			mode: "development",
 			output: {
-				filename: 'bundle.js',
+				filename: 'script.js',
+			},
+			watch: false,
+			devtool: "source-map",
+			module: {
+				rules: [{
+					test: /\.m?js$/,
+					exclude: /(node_modules|bower_components)/,
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: [
+								['@babel/preset-env', {
+									debug: true,
+									corejs: 3,
+									useBuiltIns: "usage"
+								}]
+							]
+						}
+					}
+				}]
 			}
 		}))
 		.pipe(dest(path.build.js))

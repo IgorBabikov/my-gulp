@@ -5,6 +5,10 @@
 	"main": "index.html",
 	"author": "Igor Babikov",
 	"license": "ISC",
+	"browserslist": [
+		"> 0.5%",
+		"not dead"
+	 ],
 	"devDependencies": {
 		"@babel/core": "^7.15.8",
 		"@babel/preset-env": "^7.15.8",
@@ -12,6 +16,8 @@
 		"babel-loader": "^8.2.2",
 		"babel-preset-env": "^1.7.0",
 		"browser-sync": "latest",
+		"babel": "^6.23.0",
+		"core-js": "^3.4.2",
 		"del": "latest",
 		"gulp": "latest",
 		"gulp-autoprefixer": "latest",
