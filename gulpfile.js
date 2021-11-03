@@ -1,35 +1,4 @@
-const srcPath = 'src/';
-const distPath = 'dist/';
-
-let fs = require('fs');
-
-const path = {
-	build: {
-		html: distPath,
-		js: distPath + "assets/js/",
-		css: distPath + "assets/css/",
-		images: distPath + "assets/images/",
-		fonts: distPath + "assets/fonts/",
-		favicon: "dist/assets/favicon/",
-	},
-	src: {
-		html: srcPath + "*.html",
-		js: srcPath + "assets/js/*.js",
-		css: srcPath + "assets/scss/*.scss",
-		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
-		favicon: "src/assets/favicon/**/*",
-	},
-	watch: {
-		html: srcPath + "**/*.html",
-		js: srcPath + "assets/js/**/*.js",
-		css: srcPath + "assets/scss/**/*.scss",
-		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
-		favicon: "src/assets/favicon/**/*",
-	},
-	clean: "./" + distPath
-};
+"use strict";
 
 let {
 	src,
@@ -58,10 +27,47 @@ let {
 	webpackStream = require('webpack-stream'),
 	panini = require("panini");
 
-function browserSync(params) {
+
+const srcPath = 'src/';
+const distPath = 'dist/';
+
+
+
+let fs = require('fs');
+
+const path = {
+	build: {
+		html: distPath,
+		js: distPath + "assets/js/",
+		css: distPath + "assets/css/",
+		images: distPath + "assets/images/",
+		fonts: distPath + "assets/fonts/",
+		favicon: "assets/favicon/",
+	},
+	src: {
+		html: srcPath + "*.html",
+		js: srcPath + "assets/js/*.js",
+		css: srcPath + "assets/scss/*.scss",
+		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
+		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+		favicon: "assets/favicon/**/*",
+	},
+	watch: {
+		html: srcPath + "**/*.html",
+		js: srcPath + "assets/js/**/*.js",
+		css: srcPath + "assets/scss/**/*.scss",
+		images: srcPath + "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
+		fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+		favicon: "assets/favicon/**/*",
+	},
+	clean: "./" + distPath
+};
+
+
+function browserSync() {
 	browsersync.init({
 		server: {
-			baseDir: "./" + distPath + "/"
+			baseDir: "./" + distPath
 		},
 		port: 3000,
 		notify: false
@@ -69,6 +75,7 @@ function browserSync(params) {
 }
 
 function html() {
+	panini.refresh();
 	return src(path.src.html)
 		.pipe(fileinclude())
 		// .pipe(webphtml())
