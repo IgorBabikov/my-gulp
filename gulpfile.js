@@ -141,14 +141,14 @@ function js() {
 		.pipe(browsersync.stream());
 }
 
-function jsWatch() {
+function jsDev() {
 	return src(path.src.js)
 		.pipe(webpackStream({
 			mode: "development",
 			output: {
 				filename: 'script.js',
 			},
-			watch: false,
+			watch: true,
 			devtool: "source-map",
 			module: {
 				rules: [{
@@ -267,7 +267,7 @@ function cb() {}
 function watchFiles(params) {
 	gulp.watch([path.watch.html], html);
 	gulp.watch([path.watch.css], css);
-	gulp.watch([path.watch.js], jsWatch);
+	gulp.watch([path.watch.js], jsDev);
 	gulp.watch([path.watch.images], images);
 	gulp.watch([path.watch.favicon], favicon);
 }
