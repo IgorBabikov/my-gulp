@@ -15,9 +15,9 @@ let {
 	rename = require("gulp-rename"),
 	uglify = require("gulp-uglify-es").default,
 	imagemin = require("gulp-imagemin"),
-	webphtml = require('gulp-webp-html'),
-	webp = require('imagemin-webp'),
-	webpcss = require("gulp-webpcss"),
+	// webphtml = require('gulp-webp-html'),
+	// webp = require('imagemin-webp'),
+	// webpcss = require("gulp-webpcss"),
 	svgSprite = require('gulp-svg-sprite'),
 	ttf2woff = require('gulp-ttf2woff'),
 	ttf2woff2 = require('gulp-ttf2woff2'),
@@ -106,10 +106,10 @@ function css() {
 				cascade: true
 			})
 		)
-		.pipe(webpcss({
-			webpClass: "._webp",
-			noWebpClass: "._no-webp"
-		}))
+		// .pipe(webpcss({
+		// 	webpClass: "._webp",
+		// 	noWebpClass: "._no-webp"
+		// }))
 		.pipe(dest(path.build.css))
 		.pipe(cleanCss())
 		.pipe(
@@ -174,36 +174,36 @@ function jsDev() {
 }
 
 
-function images() {
-	return src(path.src.images)
-		.pipe(newer(path.build.images))
-		.pipe(
-			imagemin([
-				webp({
-					quality: 75
-				})
-			])
-		)
-		.pipe(
-			rename({
-				extname: ".webp"
-			})
-		)
-		.pipe(dest(path.build.images))
-		.pipe(src(path.src.images))
-		.pipe(newer(path.build.images))
-		.pipe(
-			imagemin({
-				progressive: true,
-				svgoPlugins: [{
-					removeViewBox: false
-				}],
-				interlaced: true,
-				optimizationLevel: 3
-			})
-		)
-		.pipe(dest(path.build.images));
-}
+ function images() {
+ 	return src(path.src.images)
+ 		.pipe(newer(path.build.images))
+ 		.pipe(
+ 			imagemin([
+ 				webp({
+ 					quality: 75
+ 				})
+ 			])
+ 		)
+ 		.pipe(
+ 			rename({
+ 				extname: ".webp"
+ 			})
+ 		)
+ 		.pipe(dest(path.build.images))
+ 		.pipe(src(path.src.images))
+ 		.pipe(newer(path.build.images))
+ 		.pipe(
+ 			imagemin({
+ 				progressive: true,
+ 				svgoPlugins: [{
+ 					removeViewBox: false
+ 				}],
+ 				interlaced: true,
+ 				optimizationLevel: 3
+ 			})
+ 		)
+ 		.pipe(dest(path.build.images));
+ }
 
 function fonts() {
 	src(path.src.fonts)
