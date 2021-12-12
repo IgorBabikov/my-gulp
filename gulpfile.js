@@ -15,10 +15,9 @@ let {
 	rename = require("gulp-rename"),
 	uglify = require("gulp-uglify-es").default,
 	imagemin = require("gulp-imagemin"),
-	// webphtml = require('gulp-webp-html'),
-	// webp = require('imagemin-webp'),
-	// webpcss = require("gulp-webpcss"),
-	svgSprite = require('gulp-svg-sprite'),
+	webphtml = require('gulp-webp-html'),
+	webp = require('imagemin-webp'),
+	webpcss = require("gulp-webpcss"),
 	ttf2woff = require('gulp-ttf2woff'),
 	ttf2woff2 = require('gulp-ttf2woff2'),
 	fonter = require('gulp-fonter'),
@@ -78,7 +77,7 @@ function html() {
 	panini.refresh();
 	return src(path.src.html)
 		.pipe(fileinclude())
-		// .pipe(webphtml())
+		.pipe(webphtml())
 		.pipe(panini({
 			root: srcPath,
 			layouts: srcPath + 'layouts/',
@@ -106,10 +105,10 @@ function css() {
 				cascade: true
 			})
 		)
-		// .pipe(webpcss({
-		// 	webpClass: "._webp",
-		// 	noWebpClass: "._no-webp"
-		// }))
+		.pipe(webpcss({
+			webpClass: ".webp",
+			noWebpClass: ".no-webp"
+		}))
 		.pipe(dest(path.build.css))
 		.pipe(cleanCss())
 		.pipe(
@@ -174,36 +173,38 @@ function jsDev() {
 }
 
 
- function images() {
- 	return src(path.src.images)
- 		.pipe(newer(path.build.images))
- 		.pipe(
- 			imagemin([
- 				webp({
- 					quality: 75
- 				})
- 			])
- 		)
- 		.pipe(
- 			rename({
- 				extname: ".webp"
- 			})
- 		)
- 		.pipe(dest(path.build.images))
- 		.pipe(src(path.src.images))
- 		.pipe(newer(path.build.images))
- 		.pipe(
- 			imagemin({
- 				progressive: true,
- 				svgoPlugins: [{
- 					removeViewBox: false
- 				}],
- 				interlaced: true,
- 				optimizationLevel: 3
- 			})
- 		)
- 		.pipe(dest(path.build.images));
- }
+function images() {
+	return src(path.src.images)
+		.pipe(newer(path.build.images))
+
+		.pipe(
+			imagemin([
+				webp({
+					quality: 75
+				})
+			])
+		)
+
+		.pipe(
+			rename({
+				extname: ".webp"
+			})
+		)
+		.pipe(dest(path.build.images))
+		.pipe(src(path.src.images))
+		.pipe(newer(path.build.images))
+		.pipe(
+			imagemin({
+				progressive: true,
+				svgoPlugins: [{
+					removeViewBox: false
+				}],
+				interlaced: true,
+				optimizationLevel: 3
+			})
+		)
+		.pipe(dest(path.build.images));
+}
 
 function fonts() {
 	src(path.src.fonts)
@@ -228,18 +229,6 @@ function favicon() {
 		.pipe(browsersync.stream());
 }
 
-gulp.task('svgSprite', function () {
-	return gulp.src([srcPath + 'assets/iconsprite/*.svg'])
-		.pipe(svgSprite({
-			mode: {
-				stack: {
-					sprite: "../assets/icons/icons.svg",
-					example: true
-				}
-			},
-		}))
-		.pipe(dest(path.build.images));
-});
 
 function fontstyle() {
 	let fileContent = fs.readFileSync(srcPath + 'assets/scss/vendor/fonts.scss');
@@ -248,7 +237,7 @@ function fontstyle() {
 		fs.readdir(path.build.fonts, function (err, items) {
 			if (items) {
 				let cfontname;
-				for (var i = 0; i < items.length; i++) {
+				for (let i = 0; i < items.length; i++) {
 					let fontname = items[i].split('.');
 					fontname = fontname[0];
 					if (cfontname != fontname) {
